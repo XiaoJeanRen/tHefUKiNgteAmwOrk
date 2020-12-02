@@ -25,12 +25,16 @@ if (!empty($_POST['write-submit'])) {
             $original_web = $database->clean($_POST['original_web']);
             $post_member = $database->clean($user['name']);      
             $post_member_id = $database->clean($user['id']);
+            $start_daily = $database->clean($_POST['start_daily']);
+            $end_daily = $database->clean($_POST['end_daily']);
             $is_confirm = 0;
 
             $database->query("INSERT INTO `post_event_confirm_data` (
             `title`,
             `descript`,
             `organizer`,
+            `start_daily`,
+            `end_daily`,
             `original_web`,
             `post_member`,
             `post_member_id`,
@@ -39,6 +43,8 @@ if (!empty($_POST['write-submit'])) {
                 '$title',
                 '$descript',
                 '$organizer',
+                '$start_daily',
+                '$end_daily',
                 '$original_web',
                 '$post_member',
                 '$post_member_id',
@@ -79,6 +85,8 @@ $result = $database->query("SELECT `id`, `username`, `name`, `permission` FROM `
                 <input type='text' name='descript' placeholder='描述' required /><br>
                 <input type='text' name='organizer' placeholder='主辦方' required /><br>
                 <input type='text' name='original_web' placeholder='原網址' required /><br>
+                活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' required /><br>
+                活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' required /><br>
                 <input class='write-submit' type='submit' name='write-submit' value='繼續'><br>
             </form>
         </section>

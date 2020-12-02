@@ -36,7 +36,6 @@ if (!empty($_POST['detail-submit'])) {
                             主辦方：{$data['organizer']}<br>
                             活動開始日期：{$data['start_daily']}<br>
                             活動結束日期：{$data['end_daily']}<br>
-                            描述：{$data['descript']}<br>
                             得獎者：{$data['winner']}<br>
                             原網址：<a href='{$data['original_web']}'>這裡</a><br>
                             發布日期：{$data['organizer']}<br>

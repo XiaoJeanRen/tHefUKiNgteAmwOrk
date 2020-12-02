@@ -33,9 +33,7 @@
                                         <th>主辦方(organizer)</th>
                                         <th>發布人(post_member)</th>
                                         <th>活動開始日期(start_daily)</th>
-                                        <th>活動結束日期(end_daily)</th>
-                                        <th>描述(descript)</th>
-                                        <th>原網址(original_web)</th>
+                                        <th>活動結束日期(end_daily)</th>                                        <th>原網址(original_web)</th>
                                         <th>發布日期(post_daily)</th>
                                         <th>得獎者(winner)</th>
                                         <th>是否已審核(is_confirm)</th>
@@ -50,7 +48,6 @@
                                         <td>{$data['post_member']}</td>
                                         <td>{$data['start_daily']}</td>
                                         <td>{$data['end_daily']}</td>
-                                        <td>{$data['descript']}</td>
                                         <td><a href='{$data['original_web']}'>這裡</a></td>
                                         <td>{$data['post_daily']}</td>
                                         <td>{$data['winner']}</td>
@@ -60,7 +57,10 @@
                                                 <input type='hidden' name='postid' value='{$data['id']}'>
                                                 <input type='submit' name='confirm-sumit' value='審核通過'>
                                                 <input type='submit' name='notConfirm-sumit' value='審核不通過'>
-                                                <!--<input type='submit' name='edit-sumit' value='修改內容'>-->
+                                            </form>
+                                            <form class='form-manage' action='./edit_event.php#{$data['id']}' method='post'>
+                                                <input type='hidden' name='postid' value='{$data['id']}'>
+                                                <input type='submit' name='edit-sumit' value='修改內容'>
                                             </form>
                                         </td>
                                     </tr>
@@ -81,9 +81,6 @@
                     $post_id = $_POST['postid'];
                     $notconfirm_value = 0;
                     $data_notconfirm_update = $database->query("UPDATE `post_event_confirm_data` SET is_confirm = '$notconfirm_value' WHERE `id` = $post_id");
-                }
-                if (!empty($_POST['edit-sumit']) && $user['permission'] == "管理員") {
-            
                 }
                 
             } catch (Exception $e) {
