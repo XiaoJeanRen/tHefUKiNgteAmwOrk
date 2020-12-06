@@ -95,7 +95,12 @@
                             <table class='member-content-table'>
                                 <thead>
                                     <tr>
-                                        <th>標題</th>
+                                        <th>
+                                            <form class='form-manage' action='./edit_event.php#{$postMemberData['id']}' method='post'>
+                                                    <input type='hidden' name='postid' value='{$postMemberData['id']}'>
+                                                    <input type='submit' name='edit-sumit' value='修改內容'>
+                                            </form>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -213,7 +218,12 @@
                             <table class='member-content-table'>
                                 <thead>
                                     <tr>
-                                        <th>標題</th>
+                                        <th>
+                                            <form class='form-manage' action='./edit_event.php#{$postMemberData['id']}' method='post'>
+                                                    <input type='hidden' name='postid' value='{$postMemberData['id']}'>
+                                                    <input type='submit' name='edit-sumit' value='修改內容'>
+                                            </form>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>

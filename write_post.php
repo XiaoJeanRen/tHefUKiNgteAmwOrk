@@ -71,26 +71,28 @@ $result = $database->query("SELECT `id`, `username`, `name`, `permission` FROM `
             throw new Exception('此帳號不存在，發生錯誤');
         }else{
             $user = $database->fetch($result);
+            
+            if ($user['permission']) {
+                echo "<div class='write-wrapper-main'>
+                <section class='write-section-default'>
+                    <div>
+                        <form class='form-signup' action='./write_post.php' method='post'>
+                            <h1>Po 一篇送禮文造福大眾吧！</h1>
+                            <input type='text' name='title' placeholder='標題' required /><br>
+                            <input type='text' name='organizer' placeholder='主辦方' required /><br>
+                            <input type='text' name='original_web' placeholder='原網址' required /><br>
+                            活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' required /><br>
+                            活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' required /><br>
+                            <input type='text' name='descript' placeholder='描述' required /><br>
+                            <input class='write-submit' type='submit' name='write-submit' value='繼續'><br>
+                        </form>
+                    </div>
+                </section>
+            </div>";
+            }
         }
     }catch (Exception $e){
         echo $e->getMessage();
-    }
-
-    if ($user['permission']) {
-        echo "<div class='write-wrapper-main'>
-        <section class='write-section-default'>
-            <form class='form-signup' action='./write_post.php' method='post'>
-                <h1>Po 一篇送禮文造福大眾吧！</h1>
-                <input type='text' name='title' placeholder='標題' required /><br>
-                <input type='text' name='descript' placeholder='描述' required /><br>
-                <input type='text' name='organizer' placeholder='主辦方' required /><br>
-                <input type='text' name='original_web' placeholder='原網址' required /><br>
-                活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' required /><br>
-                活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' required /><br>
-                <input class='write-submit' type='submit' name='write-submit' value='繼續'><br>
-            </form>
-        </section>
-    </div>";
     }
 }
 

@@ -57,15 +57,14 @@ if (isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $result = $database->query("SELECT `id`, `username`, `name`, `permission` FROM `users` WHERE `id` = '$user_id' LIMIT 1");
 $user = $database->fetch($result);
-    if ($user['permission'] != "管理員") {
-        echo "
-            <a>你不是管理員，無法查看</a>
-        ";
-    } else {
-        $post_id = $_POST['postid'];
-        $post_data_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `id` = $post_id LIMIT 1");
+$post_id = $_POST['postid'];
+$post_data_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `id` = $post_id LIMIT 1");
+$poster = $database->fetch($post_data_result);
+    if ($user['permission'] == "管理員" or $user['id'] == $poster['post_member_id']) {
+        
         try {
-            if ($database->num_rows($post_data_result) == 0) {
+                $post_data_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `id` = $post_id LIMIT 1");
+                if ($database->num_rows($post_data_result) == 0) {
                     throw new Exception('沒有任何資料存在，發生錯誤');
                 } else {
                     while ($data = $database->fetch($post_data_result)) {
@@ -80,19 +79,19 @@ $user = $database->fetch($result);
                         } else {
                             $post_member = $data['post_member'];
                         }
-
+                        
                         echo "<div class='write-wrapper-main'>
                                 <section class='write-section-default'>
                                     <form class='form-signup' action='./edit_event.php#{$data['id']}' method='post'>
                                         <h1>修改貼文 文章編號：{$data['id']}</h1>
                                         <input type='hidden' name='postid' value='{$data['id']}'>
                                         標題：<input type='text' name='title' value='{$data['title']}' required /><br>
-                                        描述：<input type='text' name='descript' placeholder='描述' value='{$data['descript']}' required /><br>
-                                        活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' value='{$data['start_daily']}' required /><br>
-                                        活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' value='{$data['end_daily']}' required /><br>
                                         得獎者：<input type='text' name='winner' placeholder='得獎者' value='{$data['winner']}' required /><br>
                                         主辦方：<input type='text' name='organizer' placeholder='主辦方' value='{$data['organizer']}' required /><br>
-                                        原網址：<input type='text' name='original_web' placeholder='原網址' value='{$data['original_web']}' /><br>";
+                                        原網址：<input type='text' name='original_web' placeholder='原網址' value='{$data['original_web']}' /><br>
+                                        描述：<input type='text' name='descript' placeholder='描述' value='{$data['descript']}' required /><br>
+                                        活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' value='{$data['start_daily']}' required /><br>
+                                        活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' value='{$data['end_daily']}' required /><br>";
                                         if ($data['is_confirm'] == 1) {
                                             echo "審核結果：<input type='radio' name='is_confirm' value='1' checked/>審核通過 
                                             <input type='radio' name='is_confirm' value='0' />審核不通過<br>";
@@ -110,6 +109,11 @@ $user = $database->fetch($result);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+
+    } else {
+        echo "
+            <a>你不是管理員，無法查看</a>
+        ";
     }
 }
 
