@@ -27,9 +27,10 @@ if (!empty($_POST['write-submit'])) {
             $post_member_id = $database->clean($user['id']);
             $start_daily = $database->clean($_POST['start_daily']);
             $end_daily = $database->clean($_POST['end_daily']);
+            $tags = $database->clean($_POST['tags']);
             $is_confirm = 0;
 
-            $database->query("INSERT INTO `post_event_confirm_data` (
+            $new_post = $database->query("INSERT INTO `post_event_confirm_data` (
             `title`,
             `descript`,
             `organizer`,
@@ -50,6 +51,40 @@ if (!empty($_POST['write-submit'])) {
                 '$post_member_id',
                 '$is_confirm'
             )");
+            $post_id = $database->lastInsertId();
+
+            $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `tag` = '$tags' LIMIT 1");
+            try {
+                if ($database->num_rows($tags_result) == 0) {
+                    $database->query("INSERT INTO `tags`(
+                        `tag`
+                    ) VALUES (
+                        '$tags'
+                    )");
+
+                    $tag_id = $database->lastInsertId();
+                    $database->query("INSERT INTO `post_tag_relation`(
+                        `postId`,
+                        `tagId`
+                    ) VALUES (
+                        '$post_id',
+                        '$tag_id'
+                    )");
+                } else {
+                    $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `tag` = '$tags' LIMIT 1");
+                    $data = $database->fetch($tags_result);
+                    $tag_id = $data['id'];
+                    $database->query("INSERT INTO `post_tag_relation`(
+                        `postId`,
+                        `tagId`
+                    ) VALUES (
+                        '$post_id',
+                        '$tag_id'
+                    )");
+                }
+            } catch (Exception $e){
+                echo $e->getMessage();
+            }
         }
         
 
@@ -84,6 +119,7 @@ $result = $database->query("SELECT `id`, `username`, `name`, `permission` FROM `
                             活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' required /><br>
                             活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' required /><br>
                             <input type='text' name='descript' placeholder='描述' required /><br>
+                            <input type='text' name='tags' placeholder='標籤'><br>
                             <input class='write-submit' type='submit' name='write-submit' value='繼續'><br>
                         </form>
                     </div>

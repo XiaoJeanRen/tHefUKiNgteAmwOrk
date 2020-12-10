@@ -7,7 +7,7 @@
         if ($user['permission'] == "管理員") { #管理員區
             $notConfirm_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE is_confirm = 0");
             $confirm_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE is_confirm = 1");
-            $member_post_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `post_member_id` = '{$user_id}' LIMIT 1");
+            $member_post_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `post_member_id` = '{$user_id}'");
 
             #顯示未審核貼文
             echo "<div class='all-container'><div class='notconfirm-container'><a class='unconfirm-a'><h2>你好管理員，以下是未審核的貼文</h2></a>";

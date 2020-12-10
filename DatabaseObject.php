@@ -54,4 +54,9 @@ class DatabaseObject
     {
         return mysqli_affected_rows($this->con);
     }
+
+    public function lastInsertId(){
+        return mysqli_insert_id($this->con);
+    }
+
 }

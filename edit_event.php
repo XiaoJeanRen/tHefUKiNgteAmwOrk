@@ -92,12 +92,14 @@ $poster = $database->fetch($post_data_result);
                                         描述：<input type='text' name='descript' placeholder='描述' value='{$data['descript']}' required /><br>
                                         活動開始日期：<input type='datetime-local' name='start_daily' placeholder='活動開始日期' value='{$data['start_daily']}' required /><br>
                                         活動結束日期：<input type='datetime-local' name='end_daily' placeholder='活動結束日期' value='{$data['end_daily']}' required /><br>";
-                                        if ($data['is_confirm'] == 1) {
-                                            echo "審核結果：<input type='radio' name='is_confirm' value='1' checked/>審核通過 
-                                            <input type='radio' name='is_confirm' value='0' />審核不通過<br>";
-                                        } else {
-                                            echo "審核結果：<input type='radio' name='is_confirm' value='1' />審核通過 
-                                            <input type='radio' name='is_confirm' value='0' checked/>審核不通過<br>";
+                                        if ($user['permission'] == "管理員") {
+                                            if ($data['is_confirm'] == 1) {
+                                                echo "審核結果：<input type='radio' name='is_confirm' value='1' checked/>審核通過 
+                                                <input type='radio' name='is_confirm' value='0' />審核不通過<br>";
+                                            } else {
+                                                echo "審核結果：<input type='radio' name='is_confirm' value='1' />審核通過 
+                                                <input type='radio' name='is_confirm' value='0' checked/>審核不通過<br>";
+                                            }
                                         }
                                         
                                         echo "<input class='edit-submit' type='submit' name='edit-submit' value='繼續'><br>
