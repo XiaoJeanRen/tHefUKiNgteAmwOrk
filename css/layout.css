@@ -23,6 +23,26 @@ body {
 
 * {box-sizing: border-box}
 
+.tagnav {
+    overflow: hidden;
+    background-color: #2BB4DE;
+}
+
+.tagnav a {
+    float: left;
+    display: block;
+    color: #EDF2EF;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.tagnav a:hover, .dropdown:hover .dropbtn{
+    background-color: #EDF2EF;
+    color: black;
+}
+
 .topnav {
     overflow: hidden;
     background-color: #2BB4DE;

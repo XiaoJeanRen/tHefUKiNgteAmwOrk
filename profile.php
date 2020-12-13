@@ -14,7 +14,7 @@
         $user_id = $_SESSION['user_id'];
         $result = $database->query("SELECT `id`, `permission` FROM `users` WHERE `id` = '$user_id' LIMIT 1");
         $user = $database->fetch($result);
-        $member_post_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `post_member_id` = '{$user_id}' LIMIT 1");
+        $member_post_result = $database->query("SELECT * FROM `post_event_confirm_data` WHERE `post_member_id` = '{$user_id}'");
         if ($user['permission']) {
             echo "<div class='member-container'><a class='confirm-a'><h2>你的貼文</h2></a>";
             try {

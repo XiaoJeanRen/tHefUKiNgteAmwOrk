@@ -1,5 +1,15 @@
 from bs4 import BeautifulSoup
 import requests
+
+import mysql.connector
+maxdb = mysql.connector.connect(
+  host = "127.0.0.1",
+  user = "root",
+  password = "",
+  database = "byegay",
+)
+cursor=maxdb.cursor()
+
 # 匯入jieba套件
 import jieba
 import jieba.posseg as pseg
@@ -33,6 +43,9 @@ for pag in paging:
     
     i+=1
 i = -1
+
+sqlStuff = "INSERT INTO post_event_confirm_data(title, descript, original_web, post_member, is_confirm) VALUES (%s, %s, %s, %s, %s)"
+relationStuff = "INSERT INTO post_tag_relation(postId, tagId) VALUES(%d, %d)"
 
 for art in articles:
     i += 1
@@ -69,7 +82,14 @@ for art in articles:
 
         print(reallyAllContent)
         new_content = pseg.lcut(reallyAllContent)
-
+        
         for word, flag in new_content:
-            if flag == "n" :
-                print("" , word, "：" , flag)
+            if flag == "n" and word:
+                print(word)
+                sql = "SELECT * FROM tags WHERE tag = '{}'".format(word)
+                cursor.execute(sql)
+                result = cursor.fetchone()
+                if result == None:
+                    cursor.execute("INSERT INTO tags(tag) VALUES ('{}')".format(word))
+                    
+maxdb.commit()

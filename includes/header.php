@@ -71,5 +71,32 @@
         <img class="imgMiddle" src="img/logo.png"> | 白給網 <br>
         <a>使你成為客家人的康莊大道</a>
     </div>
+    <?php
+        $tags_result = $database->query("SELECT `tagId`, count(*) AS `count` FROM `post_tag_relation` GROUP BY `tagId` ORDER BY `count` DESC LIMIT 10");
+        try {
+            
+            if ($database->num_rows($tags_result) == 0) {
+                throw new Exception('沒有任何資料存在，發生錯誤');
+            } else {
+                echo "<div class='tagnav'><a>最熱門標籤：</a>";
+                while ($tags_data = $database->fetch($tags_result)) {
+                    $tagId = $tags_data['tagId'];
+                    $tag_result = $database->query("SELECT `tag` FROM `tags` WHERE `id` = $tagId");
+                    $tagData = $database->fetch($tag_result);
+                    $tagName = $tagData['tag'];
+                    echo "
+                        <div class='js-about'>
+                            <a href='category.php?tag=$tagId'>$tagName</a>
+                        </div>
+                    ";
+                }
+                echo "</div>";
+            }
+    
+        } catch (Exception $e) {
+                echo $e->getMessage();
+        }
+    
+    ?>
 </body>
 </html>
