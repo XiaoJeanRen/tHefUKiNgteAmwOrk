@@ -27,6 +27,9 @@ paging = soup.select('div[class=mark]')
 number = []
 post_member = "admin_system"
 is_confirm = "0"
+defaultDescript = '應保障他人之著作權，詳細內文請至原文網址觀看'
+tagId = 0
+postId = 0
 #宣告要取得此類標籤的文字
 articles = soup.select(tag_name)
 
@@ -44,7 +47,6 @@ for pag in paging:
     i+=1
 i = -1
 
-sqlStuff = "INSERT INTO post_event_confirm_data(title, descript, original_web, post_member, is_confirm) VALUES (%s, %s, %s, %s, %s)"
 relationStuff = "INSERT INTO post_tag_relation(postId, tagId) VALUES(%d, %d)"
 
 for art in articles:
@@ -72,7 +74,7 @@ for art in articles:
         
         lenUpdateContent = len(newContent)
         print("標題：",art.text)
-        print("原網址：",'https://www.ptt.cc' + art['href'])
+        #print("原網址：",'https://www.ptt.cc' + art['href'])
 
         for g in range(lenUpdateContent):
             if newContent[g] != '':
@@ -80,16 +82,28 @@ for art in articles:
                 allContent = newContent[g].replace('#main-content','')
                 reallyAllContent += allContent
 
-        print(reallyAllContent)
-        new_content = pseg.lcut(reallyAllContent)
+        #print(reallyAllContent)
+        originLink = 'https://www.ptt.cc' + art['href']
         
+        sql = "INSERT INTO post_event_confirm_data(title, descript, original_web, post_member, is_confirm) VALUES ('{}', '{}', '{}', '{}', '{}')".format(art.text, defaultDescript, originLink, post_member, is_confirm)
+        cursor.execute(sql)
+        postId = cursor.lastrowid
+        
+        new_content = pseg.lcut(reallyAllContent)
         for word, flag in new_content:
-            if flag == "n" and word:
-                print(word)
+            if flag == "n":
+                #print(word)
                 sql = "SELECT * FROM tags WHERE tag = '{}'".format(word)
                 cursor.execute(sql)
                 result = cursor.fetchone()
                 if result == None:
                     cursor.execute("INSERT INTO tags(tag) VALUES ('{}')".format(word))
+                    tagId = cursor.lastrowid
+                else:
+                    cursor.execute("SELECT id FROM tags WHERE tag = '{}'".format(word))
+                    tagFetch = cursor.fetchone()
+                    tagId = tagFetch[0]
+                
+                cursor.execute("INSERT INTO post_tag_relation(postId, tagId) VALUE ('{}', '{}')".format(postId, tagId))
                     
 maxdb.commit()
