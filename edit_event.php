@@ -32,7 +32,7 @@ if (!empty($_POST['edit-submit'])) {
             $is_confirm = $database->clean($_POST['is_confirm']);
             $tags_count = intval($_POST['total_chq']);
             if (empty($_POST['htags']) or empty($_POST['tags'])) { // 如果沒有任何標籤被選取，或不存在
-                print("123");
+                #print("123");
                 $deTagResult = $database->query("DELETE FROM `post_tag_relation` WHERE `postId` = $post_id"); 
             } else {
                 $htags = $_POST['htags'];
@@ -40,7 +40,7 @@ if (!empty($_POST['edit-submit'])) {
                 for($i=0; $i < count($htags); $i++){
                     if (!in_array($htags[$i],$tags)){
                         // 刪除未選取的標籤
-                        print($htags[$i]."沒有移除");
+                        #print($htags[$i]."沒有移除");
                         $deTagResult = $database->query("DELETE FROM `post_tag_relation` WHERE `postId` = $post_id AND `tagId` = $htags[$i]"); 
                     }
                 }
@@ -55,48 +55,47 @@ if (!empty($_POST['edit-submit'])) {
                 start_daily = '$start_daily',
                 end_daily = '$end_daily',
                 original_web = '$original_web',
-                post_member = '$post_member',
-                post_member_id = '$post_member_id',
                 is_confirm = '$is_confirm'
                 WHERE `id` = $post_id");
 
                 for ($i=0; $i<$tags_count; $i++){
                 if (!empty($_POST['new_tags'])){
                     $new_tags = $_POST['new_tags'];
-                                    try {
-                    if ($database->num_rows($tags_result) == 0) {
-                        $database->query("INSERT INTO `tags`(
-                            `tag`
-                        ) VALUES (
-                            '$new_tags[$i]'
-                        )");
+                    try {
+                        $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `tag` = '$new_tags[$i]'");
+                        if ($database->num_rows($tags_result) == 0) {
+                            $database->query("INSERT INTO `tags`(
+                                `tag`
+                            ) VALUES (
+                                '$new_tags[$i]'
+                            )");
 
-                        $tag_id = $database->lastInsertId();
-                        $database->query("INSERT INTO `post_tag_relation`(
-                            `postId`,
-                            `tagId`
-                        ) VALUES (
-                            '$post_id',
-                            '$tag_id'
-                        )");
-                    } else {
-                        $tagsRelationResult = $database->query("SELECT * FROM `post_tag_relation` WHERE `postId` = $post_id");
-                        $tagsRelationData = $database->fetch($tagsRelationResult);
-                        $tagIds = $tagsRelationData['tagId'];
-                        $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `id` = '$tagIds'");
-                        if ($database->num_rows($tags_result) == 0) { 
-                            $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `tag` = '$new_tags[$i]' LIMIT 1");
-                            $data = $database->fetch($tags_result);
-                            $tag_id = $data['id'];
-                        $database->query("INSERT INTO `post_tag_relation`(
-                            `postId`,
-                            `tagId`
-                        ) VALUES (
-                            '$post_id',
-                            '$tag_id'
-                        )");
-                        }   
-                    }
+                            $tag_id = $database->lastInsertId();
+                            $database->query("INSERT INTO `post_tag_relation`(
+                                `postId`,
+                                `tagId`
+                            ) VALUES (
+                                '$post_id',
+                                '$tag_id'
+                            )");
+                        } else {
+                            $tagsRelationResult = $database->query("SELECT * FROM `post_tag_relation` WHERE `postId` = $post_id");
+                            $tagsRelationData = $database->fetch($tagsRelationResult);
+                            $tagIds = $tagsRelationData['tagId'];
+                            $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `id` = '$tagIds'");
+                            if ($database->num_rows($tags_result) == 0) { 
+                                $tags_result = $database->query("SELECT `id`, `tag` FROM `tags` WHERE `tag` = '$new_tags[$i]' LIMIT 1");
+                                $data = $database->fetch($tags_result);
+                                $tag_id = $data['id'];
+                            $database->query("INSERT INTO `post_tag_relation`(
+                                `postId`,
+                                `tagId`
+                            ) VALUES (
+                                '$post_id',
+                                '$tag_id'
+                            )");
+                            }   
+                        }
 
                     } catch (Exception $e){
                         echo $e->getMessage();

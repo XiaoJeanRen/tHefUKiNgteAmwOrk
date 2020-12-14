@@ -104,6 +104,10 @@ for art in articles:
                     tagFetch = cursor.fetchone()
                     tagId = tagFetch[0]
                 
-                cursor.execute("INSERT INTO post_tag_relation(postId, tagId) VALUE ('{}', '{}')".format(postId, tagId))
+                sql = "SELECT * FROM post_tag_relation WHERE postId = '{}' AND tagId = '{}'".format(postId, tagId)
+                cursor.execute(sql)
+                result = cursor.fetchone()
+                if result == None:
+                    cursor.execute("INSERT INTO post_tag_relation(postId, tagId) VALUE ('{}', '{}')".format(postId, tagId))    
                     
 maxdb.commit()

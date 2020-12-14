@@ -29,6 +29,8 @@ if (!empty($_POST['detail-submit'])) {
                         $post_member = $data['post_member'];
                     }
 
+                    $tags_result = $database->query("SELECT * FROM `post_tag_relation` WHERE `postId` = $post_id");
+
                     echo "<div class='detail-wrapper-main'>
                     <section class='detail-section-default'>
                         <h1>{$data['title']}</h1>
@@ -41,10 +43,22 @@ if (!empty($_POST['detail-submit'])) {
                             發布日期：{$data['organizer']}<br>
                             發布人：{$post_member}<br>
                             是否已審核：{$is_confirm}<br>
-                        </div>
+                        </div>";
+                    echo "<br><div class='tagnav'><a>本文章含有標籤：</a>";
+                        while ($tags_data = $database->fetch($tags_result)) {
+                            $tagId = $tags_data['tagId'];
+                            $tag_result = $database->query("SELECT `tag` FROM `tags` WHERE `id` = $tagId");
+                            $tagData = $database->fetch($tag_result);
+                            $tagName = $tagData['tag'];
+                            echo "
+                                <a href='category.php?tag=$tagId'>$tagName</a>
+                            ";
+                        }
+                        echo "</div>";
+                    echo "
                     </section>
                   </div>";
-                }
+                }  
         }
     } catch (Exception $e) {
         echo $e->getMessage();
