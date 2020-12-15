@@ -40,6 +40,7 @@ if (!empty($_POST['detail-submit'])) {
                             活動結束日期：{$data['end_daily']}<br>
                             得獎者：{$data['winner']}<br>
                             原網址：<a href='{$data['original_web']}'>這裡</a><br>
+                            描述：{$data['descript']}<br>
                             發布日期：{$data['organizer']}<br>
                             發布人：{$post_member}<br>
                             是否已審核：{$is_confirm}<br>
