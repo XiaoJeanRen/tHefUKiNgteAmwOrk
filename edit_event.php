@@ -166,6 +166,8 @@ $poster = $database->fetch($post_data_result);
                                                 echo "審核結果：<input type='radio' name='is_confirm' value='1' />審核通過 
                                                 <input type='radio' name='is_confirm' value='0' checked/>審核不通過<br>";
                                             }
+                                        } else {
+                                            echo "<input type='hidden' name='is_confirm' value='0' checked/>審核不通過<br>";
                                         }
                                         echo "標籤：";
                                         try {

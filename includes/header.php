@@ -76,7 +76,7 @@
         try {
             
             if ($database->num_rows($tags_result) == 0) {
-                throw new Exception('沒有任何資料存在，發生錯誤');
+                throw new Exception('');
             } else {
                 echo "<div class='tagnav'><a>最熱門標籤：</a>";
                 while ($tags_data = $database->fetch($tags_result)) {
